@@ -42,8 +42,6 @@ function Manage() {
   const handleClose = () => {
     setCreate(false);
     setEdite(false);
-
-    fetchData();
   };
 
   const handleRemove = (id, number) => {
@@ -121,9 +119,9 @@ function Manage() {
           </table>
         </div>
 
-        {create && <ModalCreate handleClose={handleClose} />}
+        {create && <ModalCreate handleClose={handleClose} fetchData={fetchData} />}
 
-        {edite && <ModalEdite handleClose={handleClose} />}
+        {edite && <ModalEdite handleClose={handleClose} fetchData={fetchData} />}
       </div>
     </div>
   );

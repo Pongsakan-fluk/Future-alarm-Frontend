@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 
-function ModalAdd({ handleClose }) {
+function ModalAdd({ handleClose, fetchData }) {
   const [value, setValue] = useState({
     house_number: "",
     village_id: "",
@@ -19,12 +19,14 @@ function ModalAdd({ handleClose }) {
       .post(`https://fibaroalarmapi.onrender.com/housestatus`, value)
       .then((res) => {
         alert(`Add House ${res.data.house_number} Success!`);
-        handleClose();
+
+        fetchData();
       })
       .catch((err) => {
         console.log(err);
       });
 
+    e.target.reset();
     /* console.log(value); */
   };
 
@@ -39,7 +41,6 @@ function ModalAdd({ handleClose }) {
         </button>
         <h3 className="font-bold text-3xl text-slate-600">Add House</h3>
         <form className="mt-5" onSubmit={handleSubmit}>
-
           {/* House_number */}
           <label className="form-control w-full">
             <div className="label">

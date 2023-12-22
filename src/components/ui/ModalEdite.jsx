@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
 
-function ModalEdite({ handleClose }) {
+function ModalEdite({ handleClose, fetchData }) {
   let { id } = useParams();
 
   const [data, setData] = useState();
@@ -12,7 +12,7 @@ function ModalEdite({ handleClose }) {
     hc_serailno: "",
   }); */
 
-  const fetchData = () => {
+  const readData = () => {
     axios
       .get(`https://fibaroalarmapi.onrender.com/housestatus/id/${id}`)
       .then((res) => {
@@ -34,7 +34,8 @@ function ModalEdite({ handleClose }) {
       .put(`https://fibaroalarmapi.onrender.com/housestatus/${id}`, data)
       .then((res) => {
         alert(`Update House ${res.data.house_number} Success!`);
-        handleClose();
+
+        fetchData();
       })
       .catch((err) => {
         console.log(err);
@@ -44,7 +45,7 @@ function ModalEdite({ handleClose }) {
   /* console.log(data); */
 
   useEffect(() => {
-    fetchData();
+    readData();
   }, []);
 
   return (
@@ -107,7 +108,6 @@ function ModalEdite({ handleClose }) {
           <button
             className="mt-5 btn btn-primary w-full max-w-xs uppercase"
             type="submit"
-            /* onClick={handleSubmit} */
           >
             Submit
           </button>

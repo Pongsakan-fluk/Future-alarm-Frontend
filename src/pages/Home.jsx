@@ -1,5 +1,8 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import moment from "moment";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 import Card from "../components/ui/Card";
 
@@ -13,6 +16,40 @@ function Home() {
     time2: "",
   });
 
+  /* const startdate = moment().subtract(10, 'seconds').format().slice(0, 19);
+  const enddate = moment().format().slice(0, 19);
+
+  console.log(startdate);
+  console.log(enddate); */
+
+  const fetchDataAlways = () => {
+    const fromDate = moment().subtract(10, "seconds").format().slice(0, 19);
+    const toDate = moment().format().slice(0, 19);
+
+    axios
+      .get(
+        `https://fibaroalarmapi.onrender.com/housestatus/datetime?from=${fromDate}&to=${toDate}`
+      )
+      .then((res) => {
+        console.log(res.data);
+
+        if (res.data.length > 0) {
+          let newArray = data.map((obj) =>
+            obj._id == res.data._id ? res.data : obj
+          );
+
+          setData(newArray);
+
+          /* Loop alart noti */
+          res.data.forEach((el) => toast(`Alarm House ${el.house_number}`));
+        } else {
+          console.log("Not alarm");
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
 
   const fetchData = () => {
     axios
@@ -23,10 +60,7 @@ function Home() {
       .catch((err) => {
         console.log(err);
       });
-
-    console.log("test");
   };
-
 
   const handleChange = (e) => {
     setValue({ ...value, [e.target.name]: e.target.value });
@@ -43,17 +77,16 @@ function Home() {
       .catch((err) => {
         console.log(err);
       });
-
   };
-
+  
 
   useEffect(() => {
     fetchData();
 
     // Polling interval (every 5 seconds in this case)
     /* const interval = setInterval(() => {
-      fetchData();
-    }, 5000);
+      fetchDataAlways();
+    }, 10000);
 
     // Cleanup function to clear the interval when the component unmounts
     return () => clearInterval(interval); */
@@ -120,6 +153,8 @@ function Home() {
           </div>
         </div>
       </div>
+
+      <ToastContainer />
     </div>
   );
 }
